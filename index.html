@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chaos Magic Bookkeeping</title>
+<meta name="description" content="A bookkeeping assistant who helps small businesses tell their story to the institutions that won't take the time to listen.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="page">
+
+  <header class="masthead">
+    <h1 class="masthead__title"><a href="/">Chaos Magic Bookkeeping</a></h1>
+    <span class="masthead__meta">bookkeeping, not accounting</span>
+  </header>
+
+  <section class="hero">
+    <p class="hero__kicker">A note from the bookkeeper</p>
+    <h2 class="hero__h1">
+      You do the work. <em>I</em> keep the record.
+    </h2>
+    <p class="manifesto">
+      I'm not an accountant, I'm a storyteller. What I do is help people tell government
+      and financial institutions their story in the way that communicates their true life
+      in the most fiscally productive way. I'm not telling the story&#8202;&mdash;&#8202;I'm hearing
+      the story and recording it in a way that helps <em>you</em> tell the story to the
+      institutions who will not take as much time to listen.
+    </p>
+  </section>
+
+  <section class="section">
+    <p class="section__num">I.</p>
+    <h2 class="section__h2">Who this page is for</h2>
+    <p>
+      You run a food truck, a restaurant, a bar, a yoga studio, a dispensary. You sell
+      at a farmers market, on Etsy, through Square or PayPal or Venmo. You are making
+      or growing things&#8202;&mdash;&#8202;food, flowers, herbs, jewelry, candles, pottery, bread.
+      You are holding rooms for people who came to be there. Your work is embodied, and
+      the money moves while you are doing the thing. You want it tracked without having
+      to stop being in your life to do it.
+    </p>
+    <p>
+      I read bank statements, POS exports, and payment processor reports and I sort them
+      into categories the government and your future self will need. At the end of an
+      engagement I return a Google Sheets booklet you can use to self-file your taxes,
+      or hand to whoever files for you, or keep as the clean record your work deserves.
+    </p>
+  </section>
+
+  <div class="asterism">&#8258; &#8258; &#8258;</div>
+
+  <section class="section">
+    <p class="section__num">II.</p>
+    <h2 class="section__h2">Rates</h2>
+
+    <div class="pricing">
+
+      <div class="price-row">
+        <div>
+          <span class="price-row__label">One-time review</span>
+          <span class="price-row__note">
+            Send me your records, I return a Google Sheets booklet you can self-file from.
+          </span>
+        </div>
+        <span class="price-row__amount">$200</span>
+      </div>
+
+      <div class="price-row">
+        <div>
+          <span class="price-row__label">Monthly subscription</span>
+          <span class="price-row__note">
+            Small review each month, one full annual review. Cancel anytime.
+          </span>
+        </div>
+        <span class="price-row__amount">$55&#8202;/&#8202;month</span>
+      </div>
+
+      <div class="price-row">
+        <div>
+          <span class="price-row__label">Annual prepay</span>
+          <span class="price-row__note">
+            Same as the monthly subscription, paid upfront. You save sixty dollars.
+          </span>
+        </div>
+        <span class="price-row__amount">$600&#8202;/&#8202;year</span>
+      </div>
+
+    </div>
+
+    <p class="pricing__footer">
+      If users are loyal there is less work for me. My business ethic requires me
+      to reward that. Starting your third tax season with me, the complex genre
+      surcharge halves.
+    </p>
+  </section>
+
+  <aside class="complex-note">
+    <p>
+      <strong>A note on complex genres.</strong>
+      Some businesses carry an extra layer: a second government agency, a second set of
+      books, a second set of rules. Restaurants with alcohol, dispensaries, healers who
+      accept HSA/FSA/MSA, and similar multi-agency work include a complex genre surcharge
+      of <strong>&#8202;$100 on the one-time review</strong> and <strong>&#8202;$200 upfront</strong>
+      on the subscription (applied month one and every thirteenth month thereafter&#8202;&mdash;&#8202;not to
+      your ordinary months). I'll explain it plainly at intake. No surprises.
+    </p>
+  </aside>
+
+  <div class="asterism">&#8258; &#8258; &#8258;</div>
+
+  <section class="section contact" id="contact">
+    <p class="section__num">III.</p>
+    <h2 class="section__h2">Tell me your story</h2>
+    <p>
+      Send me the shape of your business in whatever words feel natural. I'll write
+      back within a few days. Starting rates, genre questions, scheduling&#8202;&mdash;&#8202;all of it
+      gets answered in email.
+    </p>
+
+    <!-- Status containers: populated by @formspree/ajax on submit.
+         :empty in CSS keeps them hidden until there's something to show. -->
+    <div class="form-status form-status--success" data-fs-success></div>
+    <div class="form-status form-status--error" data-fs-error></div>
+
+    <form class="form" id="contact-form" action="https://formspree.io/f/xnjlbjvy" method="POST">
+
+      <!-- Sets the email subject line in your inbox -->
+      <input type="hidden" name="_subject" value="New story from a prospective client">
+
+      <div class="form__field">
+        <label class="form__label" for="email">Your email</label>
+        <input class="form__input" type="email" id="email" name="email" data-fs-field required>
+        <span class="form__error" data-fs-error="email"></span>
+      </div>
+
+      <div class="form__field">
+        <label class="form__label" for="genre">What genre is your story?</label>
+        <p class="form__hint">
+          Genres marked with an asterisk are complex and include the surcharge described above.
+        </p>
+        <select class="form__select" id="genre" name="genre" data-fs-field required>
+          <option value="">&mdash; choose a genre &mdash;</option>
+          <option value="restaurant-no-alcohol">Restaurant (no alcohol)</option>
+          <option value="restaurant-with-alcohol">Restaurant with alcohol &#8202;*</option>
+          <option value="dispensary-cannabis">Dispensary / cannabis &#8202;*</option>
+          <option value="merchant">Merchant</option>
+          <option value="service-provider">Service provider</option>
+          <option value="creator">Creator</option>
+          <option value="healer-cash">Healer (cash or card only)</option>
+          <option value="healer-flex">Healer accepting HSA / FSA / MSA &#8202;*</option>
+          <option value="other">Other &mdash; I'll describe below</option>
+        </select>
+        <span class="form__error" data-fs-error="genre"></span>
+      </div>
+
+      <div class="form__field">
+        <label class="form__label" for="story">Tell me your story</label>
+        <p class="form__hint">
+          What do you do, how long have you been doing it, and what do you wish your
+          bookkeeping looked like that it doesn't?
+        </p>
+        <textarea class="form__textarea" id="story" name="story" rows="6" data-fs-field required></textarea>
+        <span class="form__error" data-fs-error="story"></span>
+      </div>
+
+      <!-- honeypot: real users won't see this; bots will fill it in -->
+      <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+
+      <button class="form__submit" type="submit" data-fs-submit-btn>Send it over</button>
+
+    </form>
+  </section>
+
+  <footer class="colophon">
+    <p>
+      Chaos Magic Bookkeeping is a bookkeeping practice, not an accounting firm.
+      I do not file taxes on your behalf and I do not provide accounting or tax advice.
+      I help you organize your records so you can self-file, or so you can hand a
+      clean set of books to the professional of your choosing.
+    </p>
+  </footer>
+
+</main>
+
+<!-- Formspree Ajax: submits the form without leaving the page,
+     shows status in the data-fs-success / data-fs-error containers above. -->
+<script>
+  window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+  formspree('initForm', { formElement: '#contact-form', formId: 'xnjlbjvy' });
+</script>
+<script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+
+</body>
+</html>
