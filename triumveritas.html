@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triumveritas — A Living World Tabletop RPG</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
+
+  :root {
+    --bg-dark: #0A0A14;
+    --bg-mid: #0D0B18;
+    --bg-card: #0e0c1a;
+    --gold: #D4AF5A;
+    --gold-dim: #B8963E;
+    --gold-glow: rgba(212,175,90,0.08);
+    --text-main: #E0E0EC;
+    --text-dim: #8A8AA4;
+    --text-muted: #555570;
+    --accent-red: #C44A3F;
+    --accent-blue: #3F8AC4;
+    --accent-yellow: #C4A43F;
+    --accent-green: #60E0A0;
+    --accent-purple: #8878A8;
+    --border: #1a1a2e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg-dark);
+    color: var(--text-dim);
+    font-family: 'Crimson Pro', Georgia, serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Background texture ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(184,150,62,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(184,150,62,0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    text-align: center;
+    padding: 80px 0 60px;
+    position: relative;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  }
+
+  .hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(48px, 8vw, 80px);
+    font-weight: 900;
+    color: var(--text-main);
+    letter-spacing: 6px;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .hero-pitch {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(20px, 3vw, 26px);
+    font-style: italic;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--text-muted);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* ── Section styling ── */
+  section {
+    padding: 60px 0;
+    position: relative;
+  }
+
+  section + section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(184,150,62,0.2), transparent);
+  }
+
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .section-subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 17px;
+    font-style: italic;
+    color: var(--accent-purple);
+    margin-bottom: 28px;
+  }
+
+  /* ── Video embeds ── */
+  .video-grid {
+    display: grid;
+    gap: 24px;
+    margin: 40px 0;
+  }
+
+  .video-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 20px;
+    transition: border-color 0.3s;
+  }
+
+  .video-card:hover {
+    border-color: rgba(184,150,62,0.3);
+  }
+
+  .video-card-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .video-card-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px;
+    color: var(--text-main);
+    margin-bottom: 4px;
+  }
+
+  .video-card-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+
+  .video-embed {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #06060c;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .video-embed iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .video-placeholder {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+  }
+
+  /* ── Deck video (featured) ── */
+  .featured-video {
+    margin: 40px 0;
+    border: 1px solid rgba(184,150,62,0.2);
+    background: var(--bg-card);
+    padding: 24px;
+  }
+
+  .featured-video .video-embed {
+    border-color: rgba(184,150,62,0.15);
+  }
+
+  /* ── Goals ── */
+  .goals-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 30px 0;
+  }
+
+  .goal-card {
+    text-align: center;
+    padding: 28px 16px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  .goal-card:hover {
+    border-color: rgba(184,150,62,0.3);
+    background: var(--gold-glow);
+  }
+
+  .goal-amount {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .goal-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--accent-purple);
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+
+  .goal-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  /* ── Tiers ── */
+  .tiers {
+    margin: 30px 0;
+  }
+
+  .tier {
+    display: flex;
+    gap: 20px;
+    align-items: baseline;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(120,100,180,0.08);
+  }
+
+  .tier-price {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+    min-width: 80px;
+  }
+
+  .tier-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--text-main);
+    text-transform: uppercase;
+    min-width: 120px;
+  }
+
+  .tier-desc {
+    font-size: 14px;
+    color: var(--text-dim);
+    flex: 1;
+  }
+
+  /* ── Principles ── */
+  .principles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 30px 0;
+  }
+
+  .principle {
+    padding: 24px;
+    border: 1px solid rgba(184,150,62,0.15);
+    background: var(--gold-glow);
+  }
+
+  .principle-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .principle-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 16px;
+    color: var(--text-main);
+    margin-bottom: 8px;
+  }
+
+  .principle-text {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* ── Signup form ── */
+  .signup-section {
+    padding: 60px 0 80px;
+  }
+
+  .signup-box {
+    max-width: 560px;
+    margin: 30px auto 0;
+    padding: 32px;
+    border: 1px solid rgba(184,150,62,0.2);
+    background: var(--bg-card);
+  }
+
+  .signup-box label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .signup-box input[type="email"],
+  .signup-box select {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .signup-box input[type="email"]:focus,
+  .signup-box select:focus {
+    border-color: var(--gold-dim);
+  }
+
+  .signup-box select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23555570' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  .signup-box select option {
+    background: var(--bg-dark);
+    color: var(--text-main);
+  }
+
+  .signup-btn {
+    width: 100%;
+    padding: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    background: rgba(184,150,62,0.1);
+    color: var(--gold);
+    border: 1px solid var(--gold-dim);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .signup-btn:hover {
+    background: rgba(184,150,62,0.2);
+  }
+
+  .signup-btn:active {
+    background: rgba(184,150,62,0.05);
+  }
+
+  .signup-msg {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--accent-green);
+    display: none;
+  }
+
+  .signup-msg.error {
+    color: var(--accent-red);
+  }
+
+  /* ── Quote block ── */
+  .quote-block {
+    margin: 40px 0;
+    padding: 28px 32px;
+    border-left: 3px solid var(--gold);
+    background: var(--gold-glow);
+  }
+
+  .quote-text {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--text-main);
+    line-height: 1.6;
+  }
+
+  .quote-attr {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    margin-top: 10px;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 4px;
+    color: #222233;
+    text-transform: uppercase;
+  }
+
+  .footer-links {
+    margin-top: 12px;
+    font-size: 13px;
+  }
+
+  .footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    margin: 0 12px;
+    transition: color 0.3s;
+  }
+
+  .footer-links a:hover {
+    color: var(--gold);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 700px) {
+    .goals-row { grid-template-columns: 1fr; }
+    .principles { grid-template-columns: 1fr; }
+    .tier { flex-direction: column; gap: 4px; }
+    .tier-name { min-width: auto; }
+    .hero { padding: 50px 0 40px; }
+    section { padding: 40px 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════ HERO ════════ -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-tag">Triumveritas Registry</div>
+    <h1 class="hero-title">TRIUMVERITAS</h1>
+    <p class="hero-pitch">WoW and D&amp;D split an Uber on Serenity.</p>
+    <p class="hero-sub">AI-assisted solo roleplay &amp; tabletop integration.<br>Neurodivergence is the power system.</p>
+  </div>
+</header>
+
+<!-- ════════ FEATURED VIDEO: DECK WITH VOICEOVER ════════ -->
+<section>
+  <div class="container">
+    <div class="section-tag">The Game at a Glance</div>
+    <div class="section-title">The Slide Deck</div>
+    <div class="section-subtitle">Everything you need to know before you back the game.</div>
+
+    <div class="featured-video">
+      <div class="video-embed">
+        <iframe src="https://www.youtube.com/embed/tmRl0WOdqxA" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ CAMPAIGN VIDEOS ════════ -->
+<section>
+  <div class="container">
+    <div class="section-tag">From the Creator</div>
+    <div class="section-title">The Pitch</div>
+    <div class="section-subtitle">Two videos. Two audiences. One game.</div>
+
+    <div class="video-grid">
+      <div class="video-card">
+        <div class="video-card-label">Video 01 — For Players</div>
+        <div class="video-card-title">The Game</div>
+        <div class="video-card-desc">What Triumveritas is, how the creator economy works, and why you're playing tonight.</div>
+        <div class="video-embed">
+          <!-- Video 1: The Game -->
+          <iframe src="https://www.youtube.com/embed/86tFuLttMP0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <div class="video-card-label">Video 02 — For Archive Masters</div>
+        <div class="video-card-title">Built For You, Not Instead Of You</div>
+        <div class="video-card-desc">Why human AMs are better, how your work gets credited, and what the live events look like.</div>
+        <div class="video-embed">
+          <!-- Video 2: The AM -->
+          <iframe src="https://www.youtube.com/embed/uw804oDN0T4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ PRINCIPLES ════════ -->
+<section>
+  <div class="container">
+    <div class="section-tag">Design Philosophy</div>
+    <div class="section-title">Two Principles</div>
+
+    <div class="principles">
+      <div class="principle">
+        <div class="principle-num">01</div>
+        <div class="principle-title">AI as mirror, not replacement.</div>
+        <div class="principle-text">The AI does not write your story. It reflects your choices with enough structure that the reflection holds. Your creativity. Your decisions. The AI keeps the world consistent.</div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">02</div>
+        <div class="principle-title">Solo companion, not AM replacement.</div>
+        <div class="principle-text">Human Archive Masters are better. The app exists for Tuesday night when your group chat is dead and your AM has a baby. The app fills the gap. It is not the table.</div>
+      </div>
+    </div>
+
+    <div class="quote-block">
+      <div class="quote-text">"Neurodivergence is not a debuff to balance a buff. It is a different operating system that runs different software. Some of that software is extraordinary. The cost is that the hardware requirements are non-standard and the world only sells standard parts."</div>
+      <div class="quote-attr">— Triumveritas Design Document</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ GOALS ════════ -->
+<section>
+  <div class="container">
+    <div class="section-tag">Funding</div>
+    <div class="section-title">Three Levels of Success</div>
+
+    <div class="goals-row">
+      <div class="goal-card">
+        <div class="goal-amount">$30K</div>
+        <div class="goal-name">We Launch</div>
+        <div class="goal-desc">Zacheus on Claude API. Playtest PDF and Dice Engine instant download. AM network live.</div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-amount">$80K</div>
+        <div class="goal-name">We Grow</div>
+        <div class="goal-desc">Project funded and housed for a year. Artist and developer consulted. First live event funded.</div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-amount">$150K</div>
+        <div class="goal-name">We Build the Brain</div>
+        <div class="goal-desc">CASI — our own community-owned AI kernel. Trained by players. Tipping contributors. Your data, your game, your AI.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ TIERS ════════ -->
+<section>
+  <div class="container">
+    <div class="section-tag">Back the Game</div>
+    <div class="section-title">Kickstarter Tiers</div>
+    <div class="section-subtitle">You are playing the night the campaign is funded.</div>
+
+    <div class="tiers">
+      <div class="tier">
+        <span class="tier-price">$25</span>
+        <span class="tier-name">The Player</span>
+        <span class="tier-desc">Playtest PDF + Dice Engine + 1 Year Basic Subscription.</span>
+      </div>
+      <div class="tier">
+        <span class="tier-price">$75</span>
+        <span class="tier-name">The AM</span>
+        <span class="tier-desc">Everything in Player + AM Network access through first live event + 1 Year Basic.</span>
+      </div>
+      <div class="tier">
+        <span class="tier-price">$250</span>
+        <span class="tier-name">The Founder</span>
+        <span class="tier-desc">PDF + Dice + AM Network for 1 year + Lifetime Basic Subscription.</span>
+      </div>
+      <div class="tier">
+        <span class="tier-price">$500</span>
+        <span class="tier-name">The Patron</span>
+        <span class="tier-desc">PDF + Dice + AM Network 3 years + Lifetime Basic + Guaranteed access to Expansions 1–3.</span>
+      </div>
+      <div class="tier">
+        <span class="tier-price">$1500</span>
+        <span class="tier-name">The Architect</span>
+        <span class="tier-desc">Lifetime everything ×3. Bring two friends. Expansions 1–3 ×3. Guaranteed access to Expansion 4.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ SIGNUP ════════ -->
+<section class="signup-section">
+  <div class="container">
+    <div class="section-tag">Stay Connected</div>
+    <div class="section-title" style="text-align:center">Get Involved</div>
+    <div class="section-subtitle" style="text-align:center">The campaign is coming. Tell us where to find you.</div>
+
+    <div class="signup-box">
+      <label for="signup-email">Email Address</label>
+      <input type="email" id="signup-email" placeholder="you@example.com">
+
+      <label for="signup-interest">I Want To...</label>
+      <select id="signup-interest">
+        <option value="" disabled selected>Choose one</option>
+        <option value="notify">Tell me when the campaign goes live</option>
+        <option value="questions">I have questions</option>
+        <option value="involved">I want to be involved</option>
+      </select>
+
+      <button class="signup-btn" onclick="handleSignup()">Submit</button>
+      <div class="signup-msg" id="signup-msg"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ FOOTER ════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-links">
+      <a href="#">Kickstarter</a>
+      <a href="#">YouTube</a>
+      <a href="#">Instagram</a>
+    </div>
+    <div class="footer-text" style="margin-top:20px">the data was never in the building.</div>
+  </div>
+</footer>
+
+<script>
+// ── Simple CSV storage for signups ──
+// In production this would hit an API. For now it stores to localStorage
+// and provides a downloadable CSV.
+
+function getSignups() {
+  try {
+    return JSON.parse(localStorage.getItem('tv_signups') || '[]');
+  } catch(e) {
+    return [];
+  }
+}
+
+function saveSignup(email, interest) {
+  const signups = getSignups();
+  signups.push({
+    email: email,
+    interest: interest,
+    timestamp: new Date().toISOString()
+  });
+  localStorage.setItem('tv_signups', JSON.stringify(signups));
+}
+
+function handleSignup() {
+  const email = document.getElementById('signup-email').value.trim();
+  const interest = document.getElementById('signup-interest').value;
+  const msg = document.getElementById('signup-msg');
+
+  if (!email || !email.includes('@')) {
+    msg.textContent = 'Please enter a valid email address.';
+    msg.className = 'signup-msg error';
+    msg.style.display = 'block';
+    return;
+  }
+
+  if (!interest) {
+    msg.textContent = 'Please select what you are interested in.';
+    msg.className = 'signup-msg error';
+    msg.style.display = 'block';
+    return;
+  }
+
+  saveSignup(email, interest);
+
+  // Clear form
+  document.getElementById('signup-email').value = '';
+  document.getElementById('signup-interest').selectedIndex = 0;
+
+  const messages = {
+    'notify': 'You are on the list. We will let you know the moment the campaign goes live.',
+    'questions': 'Noted. We will reach out soon.',
+    'involved': 'We see you. Expect to hear from us.'
+  };
+
+  msg.textContent = messages[interest] || 'Thank you.';
+  msg.className = 'signup-msg';
+  msg.style.display = 'block';
+}
+
+// ── Admin: download signups as CSV (type downloadSignups() in console) ──
+window.downloadSignups = function() {
+  const signups = getSignups();
+  if (signups.length === 0) { alert('No signups yet.'); return; }
+  const csv = 'Email,Interest,Timestamp\n' +
+    signups.map(s => `"${s.email}","${s.interest}","${s.timestamp}"`).join('\n');
+  const blob = new Blob([csv], {type: 'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'triumveritas-signups.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+};
+</script>
+
+</body>
+</html>
