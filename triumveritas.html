@@ -681,32 +681,13 @@
 </footer>
 
 <script>
-// ── Simple CSV storage for signups ──
-// In production this would hit an API. For now it stores to localStorage
-// and provides a downloadable CSV.
-
-function getSignups() {
-  try {
-    return JSON.parse(localStorage.getItem('tv_signups') || '[]');
-  } catch(e) {
-    return [];
-  }
-}
-
-function saveSignup(email, interest) {
-  const signups = getSignups();
-  signups.push({
-    email: email,
-    interest: interest,
-    timestamp: new Date().toISOString()
-  });
-  localStorage.setItem('tv_signups', JSON.stringify(signups));
-}
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzIX4MzarcMWOU39pOKadHAG7a-N2PExX9SU48qoE6PQ99Q-9l14bUCB5tW5pXbohJ8/exec';
 
 function handleSignup() {
   const email = document.getElementById('signup-email').value.trim();
   const interest = document.getElementById('signup-interest').value;
   const msg = document.getElementById('signup-msg');
+  const btn = document.querySelector('.signup-btn');
 
   if (!email || !email.includes('@')) {
     msg.textContent = 'Please enter a valid email address.';
@@ -722,37 +703,39 @@ function handleSignup() {
     return;
   }
 
-  saveSignup(email, interest);
+  btn.textContent = 'SENDING...';
+  btn.disabled = true;
 
-  // Clear form
-  document.getElementById('signup-email').value = '';
-  document.getElementById('signup-interest').selectedIndex = 0;
+  fetch(SHEET_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email, interest: interest })
+  })
+  .then(() => {
+    document.getElementById('signup-email').value = '';
+    document.getElementById('signup-interest').selectedIndex = 0;
 
-  const messages = {
-    'notify': 'You are on the list. We will let you know the moment the campaign goes live.',
-    'questions': 'Noted. We will reach out soon.',
-    'involved': 'We see you. Expect to hear from us.'
-  };
+    const messages = {
+      'notify': 'You are on the list. We will let you know the moment the campaign goes live.',
+      'questions': 'Noted. We will reach out soon.',
+      'involved': 'We see you. Expect to hear from us.'
+    };
 
-  msg.textContent = messages[interest] || 'Thank you.';
-  msg.className = 'signup-msg';
-  msg.style.display = 'block';
+    msg.textContent = messages[interest] || 'Thank you.';
+    msg.className = 'signup-msg';
+    msg.style.display = 'block';
+    btn.textContent = 'SUBMIT';
+    btn.disabled = false;
+  })
+  .catch(() => {
+    msg.textContent = 'Something went wrong. Try again or email us directly.';
+    msg.className = 'signup-msg error';
+    msg.style.display = 'block';
+    btn.textContent = 'SUBMIT';
+    btn.disabled = false;
+  });
 }
-
-// ── Admin: download signups as CSV (type downloadSignups() in console) ──
-window.downloadSignups = function() {
-  const signups = getSignups();
-  if (signups.length === 0) { alert('No signups yet.'); return; }
-  const csv = 'Email,Interest,Timestamp\n' +
-    signups.map(s => `"${s.email}","${s.interest}","${s.timestamp}"`).join('\n');
-  const blob = new Blob([csv], {type: 'text/csv'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'triumveritas-signups.csv';
-  a.click();
-  URL.revokeObjectURL(url);
-};
 </script>
 
 </body>
